@@ -1,4 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from '@vercel/geist/font/sans';
+import { GeistMono } from '@vercel/geist/font/mono';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -6,7 +7,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = GeistMono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
