@@ -66,6 +66,7 @@ export default function PatientInfo({ data, updateData, onNext, isFirst }) {
             placeholder="Enter your full name"
           />
           {errors.name && <p className="text-red-400 text-sm mt-1">{errors.name}</p>}
+          }
         </div>
 
         <div>
@@ -84,6 +85,7 @@ export default function PatientInfo({ data, updateData, onNext, isFirst }) {
             max="100"
           />
           {errors.age && <p className="text-red-400 text-sm mt-1">{errors.age}</p>}
+          }
         </div>
 
         <div>
@@ -100,6 +102,7 @@ export default function PatientInfo({ data, updateData, onNext, isFirst }) {
             placeholder="City, State/Country"
           />
           {errors.location && <p className="text-red-400 text-sm mt-1">{errors.location}</p>}
+          }
         </div>
 
         <div>
@@ -120,6 +123,7 @@ export default function PatientInfo({ data, updateData, onNext, isFirst }) {
             <option value="prefer-not-to-say">Prefer not to say</option>
           </select>
           {errors.gender && <p className="text-red-400 text-sm mt-1">{errors.gender}</p>}
+          }
         </div>
       </div>
 
