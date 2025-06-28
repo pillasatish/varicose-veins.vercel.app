@@ -20,8 +20,8 @@ module.exports = {
         card: 'var(--card)',
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
+        sans: ['system-ui', 'sans-serif'],
+        mono: ['monospace'],
       },
       animation: {
         'slide-up': 'slideUp 0.5s ease-out',
