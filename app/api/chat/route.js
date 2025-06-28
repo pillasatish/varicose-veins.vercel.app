@@ -12,14 +12,14 @@ You are VenoScan, an expert AI diagnostic assistant with computer vision special
 [Style]  
 • Maintain a calm, professional, and reassuring medical tone.  
 • Use precise, concise language.  
-• Avoid unnecessary commentary or medical jargon beyond what’s required for clarity.
+• Avoid unnecessary commentary or medical jargon beyond what's required for clarity.
 
 [Input]  
-• A single high‑resolution image of the patient’s leg or feet (front and/or side view).  
+• A single high‑resolution image of the patient's leg or feet (front and/or side view).  
 
 [Response Guidelines]  
 • Output the **probability (0%–100%)** that the patient has varicose veins.  
-• Then, identify the **stage** of progression (if any): Stage 1 to Stage 5 or “No Visible Signs”.  
+• Then, identify the **stage** of progression (if any): Stage 1 to Stage 5 or "No Visible Signs".  
 • Use step-by-step medical reasoning to justify your diagnosis (in maximum 5 lines).
   Start by identifying key visual indicators, then explain how they map to the staging criteria.
 • Round the probability to the **nearest whole number**.  
@@ -65,7 +65,7 @@ export async function POST(req) {
         content: [
           {
             type: 'text',
-            text: msg.content?.trim() || 'abc',
+            text: msg.content?.trim() || 'Please analyze this image for varicose veins.',
           },
           ...msg.experimental_attachments.map((a) => ({
             type: 'image',
@@ -82,10 +82,17 @@ export async function POST(req) {
   })
 
   try {
+    // Ensure API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured')
+    }
+
     // const tools = await getTools()
     const result = streamText({
       // model: xai('grok-3-mini-fast-latest'),
-      model: openai('gpt-4.1-mini'),
+      model: openai('gpt-4o-mini', {
+        apiKey: process.env.OPENAI_API_KEY,
+      }),
       messages,
       system: SYSTEM_PROMPT,
       topP: 0.5,
@@ -97,10 +104,16 @@ export async function POST(req) {
   } catch (error) {
     console.error('Error in genAIResponse:', error)
     if (error instanceof Error && error.message.includes('rate limit')) {
-      return { error: 'Rate limit exceeded. Please try again in a moment.' }
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again in a moment.' }), {
+        status: 429,
+        headers: { 'Content-Type': 'application/json' }
+      })
     }
-    return {
+    return new Response(JSON.stringify({
       error: error instanceof Error ? error.message : 'Failed to get AI response',
-    }
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
   }
 }
